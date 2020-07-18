@@ -6,10 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.main.dao.AddBookDao;
-import com.capgemini.main.entities.OrderInformation;
-
-
-
 
 @Transactional
 @Service
@@ -20,39 +16,35 @@ public class AddBookServiceImpl implements AddBookService {
 	
 	@Override
 	public boolean findOrderById(int orderId) {
-		return addBookDao.findOrder(orderId);
-		
+		return addBookDao.findOrder(orderId);	
 	}
 	
 	@Override
-	public void findOrderStatus(int orderId) {
-		addBookDao.findOrder(orderId);
-		
+	public String findOrderStatus(int orderId) {
+		return addBookDao.findOrderStatus(orderId);	
 	}
 	
 	@Override
 	public String updateAddBook(int orderId) {
-	
-		OrderInformation orderDetails=new OrderInformation();
-			orderDetails=addBookDao.getOrderDetails(orderId);
 			
-			if(orderDetails.getOrderStatus().equals("Cancelled")) {
+			if(findOrderStatus(orderId).equalsIgnoreCase("Cancelled")) {
 				return "Order is already Cancelled, can not update order";
 			}
 			
-			if(!(orderDetails.getOrderStatus().equals("Processing"))) {
+			if(findOrderStatus(orderId).equalsIgnoreCase("Shipped")) {
 				return "Order has already shipped, can not update order";
 			}
 			
-			if(orderDetails.getOrderStatus().equals("Processing")){
+			if(findOrderStatus(orderId).equalsIgnoreCase("Delivered")) {
+				return "Order has already been delivered, can not update order";
+			}
+			
+			if(findOrderStatus(orderId).equalsIgnoreCase("Processing")){
 				addBookDao.updateAddBook(orderId);
 				return "Order updated";
 			}
 			
 			return null;
-		
-		 
 	}
-
 	
 }

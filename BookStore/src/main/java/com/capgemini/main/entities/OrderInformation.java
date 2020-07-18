@@ -1,11 +1,17 @@
 package com.capgemini.main.entities;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -18,11 +24,17 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name="bookstore_order")
 public class OrderInformation {
 	
+	OrderInformationOrderBooks orderInformationOrderBooks=new OrderInformationOrderBooks();
+	
 	@Id
 	@Column(name = "order_id")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="orderIdGenerator")
-	@SequenceGenerator(name="orderIdGenerator", initialValue=1000)
+//	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="orderIdGenerator")
+//	@SequenceGenerator(name="orderIdGenerator", initialValue=1000)
 	private int orderId;
+	
+	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@JoinColumn(name = "BookId", nullable = false)
+	private List<OrderInformationOrderBooks> orderBooks=new ArrayList<OrderInformationOrderBooks>();
 	
 	@Column(name = "recipient_name")
 	@Size(min=8, max=30)
@@ -169,4 +181,32 @@ public class OrderInformation {
 	public void setOrderDate(LocalDate orderDate) {
 		this.orderDate = orderDate;
 	}
+
+	public OrderInformation() {
+		super();
+	}
+
+	public OrderInformation(int orderId, @Size(min = 8, max = 30) String recipientName,
+			@Size(min = 10, max = 15) String recipientPhoneNumber, @Size(min = 10, max = 128) String streetAddress,
+			@Size(min = 3, max = 32) String city, @Size(min = 3, max = 24) Integer zipCode,
+			@Size(min = 3, max = 64) String country, String shippingAddress, int quantity, float totalPrice,
+			String orderStatus, String paymentMethod, LocalDate orderDate) {
+		super();
+		this.orderId = orderId;
+		this.recipientName = recipientName;
+		this.recipientPhoneNumber = recipientPhoneNumber;
+		this.streetAddress = streetAddress;
+		this.city = city;
+		this.zipCode = zipCode;
+		this.country = country;
+		this.shippingAddress = shippingAddress;
+		this.quantity = quantity;
+		this.totalPrice = totalPrice;
+		this.orderStatus = orderStatus;
+		this.paymentMethod = paymentMethod;
+		this.orderDate = orderDate;
+	}
+	
+	
+	
 }

@@ -30,9 +30,7 @@ public class OrderInformationController {
 			 
 		}
 		else
-			return new ResponseEntity<String>(result,HttpStatus.OK);
-		
-		
+			return new ResponseEntity<String>(result,HttpStatus.OK);	
 	}
 }
 
